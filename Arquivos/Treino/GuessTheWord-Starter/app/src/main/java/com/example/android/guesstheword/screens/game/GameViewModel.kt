@@ -24,6 +24,8 @@ class GameViewModel: ViewModel() {
         _score.value = 0
         resetList()
         nextWord()
+        _endGame.value = finalDaLista()
+
     }
 
     override fun onCleared() {
@@ -85,5 +87,9 @@ class GameViewModel: ViewModel() {
         }
         return false
     }
+
+
+    fun getScore() = score.value?:0
+
 
 }

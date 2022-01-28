@@ -8,10 +8,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.android.guesstheword.R
 import com.example.android.guesstheword.databinding.GameFragmentBinding
-
+//GameFragment
 class GameFragment : Fragment() {
 
     private lateinit var viewModel: GameViewModel
@@ -22,9 +23,9 @@ class GameFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater,R.layout.game_fragment,container,false)
         viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
 
-
         onObserve()
         onListener()
+
         return binding.root
     }
 
@@ -35,8 +36,10 @@ class GameFragment : Fragment() {
         viewModel.score.observe(viewLifecycleOwner, Observer {
             binding.scoreText.text = viewModel.score.value.toString()
         })
-        viewModel.endGame.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.score_destination)
+        viewModel.endGame.observe(viewLifecycleOwner, Observer { hasFinished ->
+            if(hasFinished) gameFinished()
+            //findNavController().navigate(R.id.score_destination)
+
         })
     }
 
@@ -51,18 +54,13 @@ class GameFragment : Fragment() {
     }
 
     private fun onCorrect() {
-
         viewModel.correct()
     }
 
 
-
-
-
-    private fun updateWordText() {
-        binding.wordText.text = viewModel.word.value
-    }
-    private fun updateScoreText() {
-        //binding.scoreText.text = score.toString()
+    private fun gameFinished() {
+        val action = GameFragmentDirections.actionGameToScore()
+        action.score = viewModel.getScore()
+        NavHostFragment.findNavController(this).navigate(action)
     }
 }
