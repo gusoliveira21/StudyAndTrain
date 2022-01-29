@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.NavHostFragment
 
 class GameViewModel: ViewModel() {
 
@@ -88,8 +89,9 @@ class GameViewModel: ViewModel() {
         return false
     }
 
+    fun endGame() = { _endGame.value = true }
 
-    fun getScore() = score.value?:0
+    //fun getScore() = score.value?:0
 
 
 }

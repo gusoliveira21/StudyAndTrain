@@ -22,45 +22,23 @@ class GameFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater,R.layout.game_fragment,container,false)
         viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
+        binding.gameViewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         onObserve()
-        onListener()
-
         return binding.root
     }
 
     private fun onObserve(){
-        viewModel.word.observe(viewLifecycleOwner, Observer {
-            binding.wordText.text = viewModel.word.value
-        })
-        viewModel.score.observe(viewLifecycleOwner, Observer {
-            binding.scoreText.text = viewModel.score.value.toString()
-        })
         viewModel.endGame.observe(viewLifecycleOwner, Observer { hasFinished ->
             if(hasFinished) gameFinished()
-            //findNavController().navigate(R.id.score_destination)
-
         })
-    }
-
-    private fun onListener(){
-        binding.correctButton.setOnClickListener { onCorrect() }
-        binding.skipButton.setOnClickListener { onSkip() }
-        binding.endGameButton.setOnClickListener {  }
-    }
-
-    private fun onSkip() {
-        viewModel.skip()
-    }
-
-    private fun onCorrect() {
-        viewModel.correct()
     }
 
 
     private fun gameFinished() {
         val action = GameFragmentDirections.actionGameToScore()
-        action.score = viewModel.getScore()
+        action.score = viewModel.score.value?:0
         NavHostFragment.findNavController(this).navigate(action)
     }
 }
