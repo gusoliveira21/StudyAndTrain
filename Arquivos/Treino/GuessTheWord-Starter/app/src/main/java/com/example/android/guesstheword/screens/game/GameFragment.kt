@@ -20,8 +20,10 @@ class GameFragment : Fragment() {
     private lateinit var binding: GameFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
+
         binding = DataBindingUtil.inflate(inflater,R.layout.game_fragment,container,false)
         viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
+
         binding.gameViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
